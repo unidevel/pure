@@ -108,14 +108,14 @@ prompt_pure_preprompt_render() {
 
 	# Set color for git branch/dirty status, change color if dirty checking has
 	# been delayed.
-	local git_color=242
+	local git_color=green
 	[[ -n ${prompt_pure_git_last_dirty_check_timestamp+x} ]] && git_color=red
 
 	# Initialize the preprompt array.
 	local -a preprompt_parts
 
 	# Set the path.
-	preprompt_parts+=('%F{blue}%~%f')
+	preprompt_parts+=('%n@%m %F{yellow}%~%f')
 
 	# Add git branch and dirty status info.
 	typeset -gA prompt_pure_vcs_info
@@ -130,9 +130,9 @@ prompt_pure_preprompt_render() {
 	# Username and machine, if applicable.
 	[[ -n $prompt_pure_state[username] ]] && preprompt_parts+=('${prompt_pure_state[username]}')
 	# Execution time.
-	[[ -n $prompt_pure_cmd_exec_time ]] && preprompt_parts+=('%F{yellow}${prompt_pure_cmd_exec_time}%f')
+	[[ -n $prompt_pure_cmd_exec_time ]] && preprompt_parts+=('%F{red}${prompt_pure_cmd_exec_time}%f')
 
-	local cleaned_ps1=$PROMPT
+	local cleaned_ps1="%F{blue}%w%t%f %h $PROMPT"
 	local -H MATCH MBEGIN MEND
 	if [[ $PROMPT = *$prompt_newline* ]]; then
 		# Remove everything from the prompt until the newline. This
@@ -602,7 +602,7 @@ prompt_pure_setup() {
 	# information.
 	local -A ps4_parts
 	ps4_parts=(
-		depth 	  '%F{yellow}${(l:${(%)prompt_pure_debug_depth[1]}::+:)}%f'
+		depth 	  '%F{cyan}${(l:${(%)prompt_pure_debug_depth[1]}::+:)}%f'
 		compare   '${${(%)prompt_pure_debug_depth[2]}:#${(%)prompt_pure_debug_depth[3]}}'
 		main      '%F{blue}${${(%)prompt_pure_debug_depth[3]}:t}%f%F{242}:%I%f %F{242}@%f%F{blue}%N%f%F{242}:%i%f'
 		secondary '%F{blue}%N%f%F{242}:%i'
