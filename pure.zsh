@@ -115,7 +115,7 @@ prompt_pure_preprompt_render() {
 	local -a preprompt_parts
 
 	# Set the path.
-	preprompt_parts+=('%n@%m %F{yellow}%~%f')
+	preprompt_parts+=('%h %F{yellow}%~%f')
 
 	# Add git branch and dirty status info.
 	typeset -gA prompt_pure_vcs_info
@@ -132,7 +132,7 @@ prompt_pure_preprompt_render() {
 	# Execution time.
 	[[ -n $prompt_pure_cmd_exec_time ]] && preprompt_parts+=('%F{red}${prompt_pure_cmd_exec_time}%f')
 
-	local cleaned_ps1="%F{blue}%w%t%f %h $PROMPT"
+	local cleaned_ps1="%F{blue}%D{%H:%M:%S}%f $PROMPT"
 	local -H MATCH MBEGIN MEND
 	if [[ $PROMPT = *$prompt_newline* ]]; then
 		# Remove everything from the prompt until the newline. This
@@ -160,7 +160,7 @@ prompt_pure_preprompt_render() {
 		print
 	elif [[ $prompt_pure_last_prompt != $expanded_prompt ]]; then
 		# Redraw the prompt.
-		zle && zle .reset-prompt
+		# zle && zle .reset-prompt
 	fi
 
 	typeset -g prompt_pure_last_prompt=$expanded_prompt
