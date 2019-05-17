@@ -540,7 +540,7 @@ prompt_pure_state_setup() {
 	# show username@host if logged in through SSH
 	#[[ -n $ssh_connection ]] && username='%F{cyan}%n@%m%f'
   if [[ -n $ssh_connection ]]; then
-    username='%F{cyan}%n@%m%f'
+    username='%F{red}%n@%m%f'
   else
     username='%F{cyan}%n@localhost%f'
   fi
