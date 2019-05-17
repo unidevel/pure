@@ -113,9 +113,11 @@ prompt_pure_preprompt_render() {
 
 	# Initialize the preprompt array.
 	local -a preprompt_parts
+  preprompt_parts+=("%F{blue}%D{%H:%M:%S}%f")
 
 	# Set the path.
-	preprompt_parts+=('%h %F{yellow}%~%f')
+	# preprompt_parts+=('%h %F{yellow}%~%f')
+	preprompt_parts+=('%F{yellow}%~%f')
 
 	# Add git branch and dirty status info.
 	typeset -gA prompt_pure_vcs_info
@@ -128,11 +130,13 @@ prompt_pure_preprompt_render() {
 	fi
 
 	# Username and machine, if applicable.
-	[[ -n $prompt_pure_state[username] ]] && preprompt_parts+=('${prompt_pure_state[username]}')
+	# [[ -n $prompt_pure_state[username] ]] && preprompt_parts+=('${prompt_pure_state[username]}')
 	# Execution time.
 	[[ -n $prompt_pure_cmd_exec_time ]] && preprompt_parts+=('%F{red}${prompt_pure_cmd_exec_time}%f')
 
-	local cleaned_ps1="%F{blue}%D{%H:%M:%S}%f $PROMPT"
+	# local cleaned_ps1="%F{blue}%D{%H:%M:%S}%f $PROMPT"
+	local cleaned_ps1="$PROMPT"
+  [[ -n $prompt_pure_state[username] ]] && cleaned_ps1=('${prompt_pure_state[username]} '$cleaned_ps1)
 	local -H MATCH MBEGIN MEND
 	if [[ $PROMPT = *$prompt_newline* ]]; then
 		# Remove everything from the prompt until the newline. This
@@ -534,7 +538,12 @@ prompt_pure_state_setup() {
 	fi
 
 	# show username@host if logged in through SSH
-	[[ -n $ssh_connection ]] && username='%F{cyan}%n@%m%f'
+	#[[ -n $ssh_connection ]] && username='%F{cyan}%n@%m%f'
+  if [[ -n $ssh_connection ]]; then
+    username='%F{cyan}%n@%m%f'
+  else
+    username='%F{cyan}%n@localhost%f'
+  fi
 
 	# show username@host if root, with username in white
 	[[ $UID -eq 0 ]] && username='%F{white}%n%f%F{242}@%m%f'
